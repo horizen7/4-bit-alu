@@ -49,6 +49,9 @@ begin
         --    2) Add unsigned, carry
         --    3) Signed no overflow
         --    4) Signed with overflow
+        --    5) Testing zero flag
+        --    6) Testing negative flag
+        --    7) Test overflow with neg
         
         -- step 1
         opA <= "0001"; opB <= "0001"; wait for 20 ns;
@@ -62,6 +65,18 @@ begin
 
         -- step 4
         opA <= "0111"; opB <= "0001"; wait for 20 ns;
+
+        -- step 5
+        mode <= '0';
+        opA <= '0'; opB <= '0'; wait for 20 ns;
+
+        -- step 6
+        mode <= '1';
+        opA <= "1000"; opB <= "0001"; wait for 20 ns;
+
+        -- step 7
+        opA <= "0111"; opB <= "0110"; wait for 20 ns;
+
 
     end process;
 end test;
