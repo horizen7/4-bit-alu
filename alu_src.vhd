@@ -51,6 +51,13 @@ begin
                 else
                     tmp_out <= std_logic_vector(resize(a_s, 5) + resize(b_s, 5));
                 end if;
+            when sub_t => 
+                if mode = '0' then 
+                    -- unsigned sub, 
+                    tmp_out <= std_logic_vector(('0' & a_u) - ('0' & b_u));
+                else
+                    tmp_out <= std_logic_vector(resize(a_s, 5) - resize(b_s, 5));
+                end if;
             when others => null;
         end case;
     end process result_proc;
@@ -64,13 +71,13 @@ begin
 
         case op is
             when add_t =>
-                if mode = '0' then -- unsigned add
-                    -- carry and zero check
-                    C <= tmp_out(4);   
-                    if tmp_out = "00000" then
+                -- zero flag check for both are same
+                if tmp_out = "00000" then
                         Z <= '1';
                     else Z <= '0'; end if;
-
+                if mode = '0' then -- unsigned add
+                    -- carry check
+                    C <= tmp_out(4);   
                 else -- signed add
                     -- overflow and negative check
                     N <= tmp_out(3);
@@ -79,6 +86,20 @@ begin
                     else
                         V <= '0'; end if;
                 end if;
+
+            when sub_t => 
+                -- zero check the same for both so outside of mode checks
+                if tmp_out = "00000" then 
+                        Z <= '1';
+                    else Z <= '0'; end if;
+                if mode = '0' then 
+                    -- unsigned sub, carry
+                    C <= tmp_out(tmp_out'high);
+                else -- signed sub, neg, over, resp.
+                    N <= tmp_out(tmp_out'high);
+                    
+                end if;
+                    
             when others => null;
         end case;
     end process flag_proc;
