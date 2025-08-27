@@ -55,27 +55,34 @@ begin
         
         -- step 1
         opA <= "0001"; opB <= "0001"; wait for 20 ns;
+        -- output = 0010 | N = 0 | Z = 0 | C = 0 | V = 0
 
         -- step 2
         opA <= "1111"; opB <= "1110"; wait for 20 ns;
+         -- output = 1101 | N = 0 | Z = 0 | C = 1 | V = 0
 
         -- step 3
         mode <= '1';
         opA <= "0011"; opB <= "0001"; wait for 20 ns;
+         -- output = 0100 | N = 0 | Z = 0 | C = 0 | V = 0
 
         -- step 4
         opA <= "0111"; opB <= "0001"; wait for 20 ns;
+         -- output = 1000 | N = 0 | Z = 0 | C = 0 | V = 1
 
         -- step 5
         mode <= '0';
-        opA <= '0'; opB <= '0'; wait for 20 ns;
+        opA <= "0000"; opB <= "0000"; wait for 20 ns;
+         -- output = 0000 | N = 0 | Z = 1 | C = 0 | V = 0
 
         -- step 6
         mode <= '1';
         opA <= "1000"; opB <= "0001"; wait for 20 ns;
+         -- output = 1001 | N = 1 | Z = 0 | C = 0 | V = 0
 
         -- step 7
         opA <= "0111"; opB <= "0110"; wait for 20 ns;
+         -- output = 1101 | N = 0 | Z = 0 | C = 0 | V = 1
 
 
     end process;

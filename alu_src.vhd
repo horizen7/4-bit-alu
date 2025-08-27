@@ -67,7 +67,7 @@ begin
                 if mode = '0' then -- unsigned add
                     -- carry and zero check
                     C <= tmp_out(4);   
-                    if tmp_out = (others => '0') then
+                    if tmp_out = "00000" then
                         Z <= '1';
                     else Z <= '0'; end if;
 
@@ -76,8 +76,6 @@ begin
                     N <= tmp_out(3);
                     if (a_s(3) = b_s(3)) and (tmp_out(3) /= a_s(3)) then
                         V <= '1';
-                        if a_s(3) = '1' then N <= '1';
-                        else N <= '0'; end if;
                     else
                         V <= '0'; end if;
                 end if;
