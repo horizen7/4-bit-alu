@@ -53,8 +53,8 @@ begin
                 end if;
             when sub_t => 
                 if mode = '0' then 
-                    -- unsigned sub, 
-                    tmp_out <= std_logic_vector(('0' & a_u) - ('0' & b_u));
+                    -- unsigned sub, prepend '1' to operand A to av cary bit default to '1'
+                    tmp_out <= std_logic_vector(('1' & a_u) - ('0' & b_u));
                 else
                     tmp_out <= std_logic_vector(resize(a_s, 5) - resize(b_s, 5));
                 end if;
@@ -81,7 +81,7 @@ begin
                 else -- signed add
                     -- overflow and negative check
                     N <= tmp_out(3);
-                    if (a_s(3) = b_s(3)) and (tmp_out(3) /= a_s(3)) then
+                    if ( (not(a_s(3) xor b_s(3)) and (tmp_out(3) xor a_s(3))) = '1' ) then
                         V <= '1';
                     else
                         V <= '0'; end if;
@@ -89,15 +89,17 @@ begin
 
             when sub_t => 
                 -- zero check the same for both so outside of mode checks
-                if tmp_out = "00000" then 
+                if tmp_out(3 downto 0) = "0000" then 
                         Z <= '1';
                     else Z <= '0'; end if;
                 if mode = '0' then 
                     -- unsigned sub, carry
                     C <= tmp_out(tmp_out'high);
                 else -- signed sub, neg, over, resp.
-                    N <= tmp_out(tmp_out'high);
-                    
+                    N <= tmp_out(3);
+                    if ( ((a_s(3) xor b_s(3)) and (tmp_out(3) xor a_s(3))) = '1') then 
+                        V <= '1'; 
+                    else V <= '0'; end if;
                 end if;
                     
             when others => null;

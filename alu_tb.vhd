@@ -87,5 +87,30 @@ begin
          -- output = 1101 | N = 1 | Z = 0 | C = 0 | V = 1
 
 
+        -- setting to SUB, unsigned
+        opCode <= "0001";
+        mode <= '0';
+
+        --  1) subtract unsigned values, no flags
+        --  2) subtract unsigned values, Z flag
+        --  3) subtract unsigned, C flag
+        --  4) subtract signed, no flags
+        --  5) signed, Z
+        --  6) signed N
+        --  7) signed V
+
+        -- step 1
+        opA <= "1000"; opB <= "0010"; wait for 20 ns;
+        -- output = 0110 | N = 0 | Z = 0 | C = 1 | v = 0
+
+        -- step 2
+        opA <= "0110"; opB <= "0110"; wait for 20 ns;
+        -- output = 0000 | N = 0 | Z = 1 | C = 1 | V = 0
+
+        -- step 3
+        opA <= "0001"; opB <= "0010"; wait for 20 ns;
+        -- output = 1111 | N = 0 | Z = 0 | C = 0 | V = 0
+
+
     end process;
 end test;
