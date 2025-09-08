@@ -54,7 +54,7 @@ begin
             when sub_t => 
                 if mode = '0' then 
                     -- unsigned sub, prepend '1' to operand A to av cary bit default to '1'
-                    tmp_out <= std_logic_vector(('1' & a_u) - ('0' & b_u));
+                    tmp_out <= std_logic_vector(('0' & a_u) - ('0' & b_u));
                 else
                     tmp_out <= std_logic_vector(resize(a_s, 5) - resize(b_s, 5));
                 end if;
@@ -77,14 +77,11 @@ begin
                     else Z <= '0'; end if;
                 if mode = '0' then -- unsigned add
                     -- carry check
-                    C <= tmp_out(4);   
+                    C <= not tmp_out(4);   
                 else -- signed add
                     -- overflow and negative check
                     N <= tmp_out(3);
-                    if ( (not(a_s(3) xor b_s(3)) and (tmp_out(3) xor a_s(3))) = '1' ) then
-                        V <= '1';
-                    else
-                        V <= '0'; end if;
+                    V <= not((a_s(3) xor b_s(3)) and (tmp_out(3) xor a_s(3)));
                 end if;
 
             when sub_t => 
@@ -94,14 +91,14 @@ begin
                     else Z <= '0'; end if;
                 if mode = '0' then 
                     -- unsigned sub, carry
-                    C <= tmp_out(tmp_out'high);
+                    C <= not tmp_out(tmp_out'high);
                 else -- signed sub, neg, over, resp.
                     N <= tmp_out(3);
-                    if ( ((a_s(3) xor b_s(3)) and (tmp_out(3) xor a_s(3))) = '1') then 
-                        V <= '1'; 
-                    else V <= '0'; end if;
+                    V <= ((a_s(3) xor b_s(3)) and (tmp_out(3) xor a_s(3)));
                 end if;
-                    
+            
+            when mult_t => 
+            null;
             when others => null;
         end case;
     end process flag_proc;

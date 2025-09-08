@@ -95,7 +95,7 @@ begin
         --  2) subtract unsigned values, Z flag
         --  3) subtract unsigned, C flag
         --  4) subtract signed, no flags
-        --  5) signed, Z
+        --  5) signed Z
         --  6) signed N
         --  7) signed V
 
@@ -111,6 +111,22 @@ begin
         opA <= "0001"; opB <= "0010"; wait for 20 ns;
         -- output = 1111 | N = 0 | Z = 0 | C = 0 | V = 0
 
+        -- step 4
+        mode <= '1';
+        opA <= "0100"; opB <= "0001"; wait for 20 ns;
+        -- output = 0011 | N = 0 | Z = 0 | C = 1 | V = 0
+
+        -- step 5
+        opA <= "0100"; opB <= "0100"; wait for 20 ns;
+        -- output = 0000 | N = 0 | Z = 1 | C = 1 | V = 0
+
+        -- step 6
+        opA <= "0100"; opB <= "0110"; wait for 20 ns;
+        -- output = 1110 | N = 1 | Z = 0 | C = ? | V = 0
+
+        -- step 7
+        opA <= "0111"; opB <= "1000"; wait for 20 ns;
+        -- output = 1111 | N = 1 | Z = 0 | C = ? | V = 1
 
     end process;
 end test;
