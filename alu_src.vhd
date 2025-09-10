@@ -58,6 +58,10 @@ begin
                 else
                     tmp_out <= std_logic_vector(resize(a_s, 5) - resize(b_s, 5));
                 end if;
+            
+            when mult_t =>
+                if mode = '0' then 
+                    
             when others => null;
         end case;
     end process result_proc;
@@ -98,7 +102,7 @@ begin
                 end if;
             
             when mult_t => 
-            null;
+                
             when others => null;
         end case;
     end process flag_proc;
